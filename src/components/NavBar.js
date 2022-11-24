@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import { menuData } from './layout/header';
 import {Link, useMatch, useResolvedPath} from "react-router-dom"
 import { BodyIntro } from '../styles/TextStyles';
+import AuthModal from './Modals/AuthModal';
 
-export default function NavBar() {
-    
+export default function NavBar({showAuthModal}) {
+
+
 return (
     <nav>
-        <Wrapper>
+        <Wrapper >
         <BodyIntro>myDrobe</BodyIntro>
             <MenuWrapper>
         {menuData.map((item, index) => (
             <CustomLink to={item.link}>
-        <MenuItem key={index} title={item.title}>
+        <MenuItem key={index} title={item.title} onClick={() => (index == 3 && showAuthModal(true))}>
             <img src={item.icon} alt={item.title}/>
             {item.title}
             </MenuItem>
@@ -21,7 +23,9 @@ return (
    ))}
         </MenuWrapper>
         </Wrapper>
+        
     </nav>
+
 
     
 )

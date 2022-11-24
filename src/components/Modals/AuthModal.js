@@ -3,28 +3,36 @@ import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import xIcon from "../../images/icon/xIcon.svg"
 
-export default function AuthModal(props) {
+export default function AuthModal({closeModal}, props) {
 
-  const {signIn, signUp, signOut} = props
-  const [authState, setAuthState] = useState(signIn)
-  
 
+  const {signIn=0, signUp=1, confirmation=2, session=3} = props
+  const [authState, setAuthState] = useState(session);
   return (
+    <Overlay onClick={closeModal} >
+    <ModalContainer onClick={(e) => e.stopPropagation()}>
     <ModalWrapper >
-      <Icon src={xIcon} />
-      
-      {/* {authState && <SignInModal setAuthState={() => setAuthState(signUp)}/>}
-      {authState != signIn && <SignUpModal setAuthState={() => setAuthState(signIn)}/>} */}
-      <ProfileModal />
-    
-      
-
+      <Icon src={xIcon} onClick={closeModal} />
+     
  
+    {authState == signIn && <SignInModal authState={setAuthState} back={signUp} />}
+    
+    {authState == signUp && <SignUpModal authState={setAuthState} back={signIn} forward={confirmation}/>}
+
+    {authState == confirmation && <ConfirmationModal authState={setAuthState} back={signUp} />}
+    {authState == session && <ProfileModal />}
+    {console.log("authSate", authState)}
+    {console.log("authSate", authState)}
+   
+
+
     </ModalWrapper>
+    </ModalContainer>
+    </Overlay>
   )
 }
 
-const SignInModal = ({setAuthState}) => (
+const SignInModal = ({authState, back}) => (
   <>
     <ModalTitle>Sign In</ModalTitle>
     <InputWrapper>
@@ -37,7 +45,7 @@ const SignInModal = ({setAuthState}) => (
       <TextField type="password"></TextField>
     </InputWrapper>
     <Wrapper>
-      <Title onClick={setAuthState}>Don't have an account?</Title>
+      <Title onClick={() => (authState(back))}>Don't have an account?</Title>
       <Title>Forgot Password?</Title>
     </Wrapper>
 
@@ -46,7 +54,7 @@ const SignInModal = ({setAuthState}) => (
   </>
 )
 
-const SignUpModal = ({setAuthState}) => (
+const SignUpModal = ({authState, back, forward}) => (
   <>
     <ModalTitle>Sign up</ModalTitle>
     <InputWrapper>
@@ -67,12 +75,26 @@ const SignUpModal = ({setAuthState}) => (
       <TextField type="password"></TextField>
     </InputWrapper>
     <ButtonContainer>
-    <Button onClick={setAuthState}>Back</Button>
-    <Button>Sign up</Button>
+    <Button onClick={() => (authState(back))}>Back</Button>
+    <Button onClick={() => (authState(forward))}>Sign up</Button>
     </ButtonContainer>
  
   </>
 )
+
+
+const ConfirmationModal = ({authState, back}) => (
+  <>
+  <ModalTitle>Confirmation</ModalTitle>
+  <Title>Verification code has been sent to</Title>
+  <TextField type="text"></TextField>
+  <ButtonContainer>
+  <Button onClick={() => (authState(back))}>Back</Button>
+  <Button style={{background: "#F27A7D"}}>Confirm</Button>
+  </ButtonContainer>
+  </>
+)
+
 
 const ProfileModal = () => (
   <>
@@ -81,6 +103,24 @@ const ProfileModal = () => (
   <Button style={{background: "#F27A7D"}}>Sign out</Button>
   </>
 )
+
+
+const Overlay = styled.div`
+position: absolute;
+background-color: rgba(0, 0, 0, 0.5);
+border-radius: 20px;
+width: 100%;
+height: 100%;
+`
+
+const ModalContainer = styled.div`
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.75);
+border-radius: 20px;
+`
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;

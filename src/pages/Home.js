@@ -7,10 +7,11 @@ import WhySection from '../components/section/HomePageSections/WhySection';
 import TrendSection from '../components/section/HomePageSections/TrendSection';
 import FAQSection from '../components/section/HomePageSections/FaqSection';
 
+
  const Home = () => (
 
-        <>
-       
+   
+       <>
         <HeroSection />
         <ContentSection />
         <GeneratorSection />

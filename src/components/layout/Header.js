@@ -44,7 +44,7 @@ export default function Header() {
             <BodyIntro>myDrobe</BodyIntro>
         <MenuWrapper>
         {menuData.map((item, index) => (
-            <MenuButton item={item} key={index}  />
+            <MenuButton item={item} key={index} />
     ))}
   
        </MenuWrapper>
