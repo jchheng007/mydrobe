@@ -1,6 +1,6 @@
 {
   "auth": {
-    "mydrobe1a8a8eba": {
+    "mydrobe": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -11,6 +11,8 @@
           "EMAIL"
         ],
         "signupAttributes": [
+          "GIVEN_NAME",
+          "FAMILY_NAME",
           "EMAIL"
         ],
         "passwordProtectionSettings": {
@@ -37,12 +39,15 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 365,
-              "apiKeyExpirationDate": "2023-11-23T06:08:04.642Z",
-              "description": ""
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }

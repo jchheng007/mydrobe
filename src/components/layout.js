@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import Header from "./layout/header"
 import "./layout.css"
 import NavBar from "./NavBar"
@@ -15,16 +15,20 @@ import WardrobePage from "../pages/WardrobePage.js"
 import OutfitGenerator from "./section/WardrobePageSections/OutfitGenerator"
 import WardrobeContent from "./section/WardrobePageSections/WardrobeContent"
 import AuthModal from "./Modals/AuthModal"
-import { UserContext } from "../contexts/UserContext"
+import useUser from "../contexts/UserContext"
 
 
 
-const Layout = ({children}) => {
+
+
+
+const Layout = () => {
 
 const [authModal, setShowAuthModal] = useState(false);
+
   return (
     <div>
-        <UserContext.Provider >
+     
       <NavBar showAuthModal={setShowAuthModal} />
         <Routes>
      
@@ -33,8 +37,11 @@ const [authModal, setShowAuthModal] = useState(false);
         <Route path="/WardrobePage/outfitgen/" element={<WardrobePage children={<div><OutfitGenerator /></div>} />} />
         
         </Routes>
-        {authModal && <AuthModal closeModal={() => (setShowAuthModal(false))} />}
-        </UserContext.Provider>
+        {authModal && <AuthModal closeModal={() => (setShowAuthModal(false))}/>}
+
+        
+        
+      
     </div>
   )
 }

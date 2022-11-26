@@ -8,6 +8,9 @@ import AuthModal from './Modals/AuthModal';
 export default function NavBar({showAuthModal}) {
 
 
+
+
+
 return (
     <nav>
         <Wrapper >
