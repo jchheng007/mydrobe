@@ -1,16 +1,67 @@
 import React, { useEffect, useRef, useState, useContext } from "react"
-import { useParams } from "react-router-dom"
+import{Auth} from 'aws-amplify'
+import { useParams, useResolvedPath } from "react-router-dom"
 import styled from "styled-components"
 import xIcon from "../../images/icon/xIcon.svg"
-import { signingUp } from "../../App"
+import { signingUp} from "../../App"
 import useUser, { initialState, UserContext } from "../../contexts/UserContext"
-
+import { Cookies, useCookies } from "react-cookie"
+import { ConsoleLogger } from "@aws-amplify/core"
 export default function AuthModal({ closeModal }, props) {
-  const {userEmail, signingIn, signingUp, confirmSignUp } = useUser()
-  const user = localStorage.getItem('user')
+  const {userEmail, signingUp, confirmSignUp, userSession, signedInUser} = useUser()
+  const [cookies, setCookie, removeCookie] = useCookies(['user'])
   const { signIn = 0, signUp = 1, confirmation = 2, session = 3 } = props
 
-  const [authState, setAuthState] = useState(!user ? signIn : session)
+   const handleCookie = (id, given_name, family_name, email) => {
+    setCookie('userId', id, {path: '/'})
+    setCookie('given_name', given_name, {path: '/'})
+    setCookie('family_name', family_name, {path: '/'})
+    setCookie('email', email, {path: '/'})
+  }
+
+   async function signingIn(email, password) {
+    try 
+    {
+         const signedInUser = await Auth.signIn(email, password);
+      //   const attributes = await Auth.currentAuthenticatedUser({
+      //   }).then((attributes) => {console.log('user is in app.js', attributes.given_name)
+         
+         
+      // })
+      //   .catch(err => console.log(err));
+       const currentUser =  Auth.currentSession()
+  .then(data => {
+    console.log('current user data', data)
+    let accessToken = data.getAccessToken();
+    let idToken = data.getIdToken();
+
+    console.log('current sub is ', accessToken.payload.sub)
+    handleCookie(accessToken.payload.sub, idToken.payload.given_name, idToken.payload.family_name, idToken.payload.email) 
+
+})
+  .catch(err => console.log(err));
+
+    } catch (err) {
+      console.log("error in the signIn", err)
+    }
+  }
+
+  async function signOut() {
+    try {
+        await Auth.signOut({global: true});
+        console.log('signinout')
+    } catch (error) {
+        console.log('error signing out: ', error);
+    }
+}
+
+
+
+  const cookie = cookies
+
+
+  
+  const [authState, setAuthState] = useState(!cookie.userId ? signIn : session)
   return (
     <Overlay onClick={closeModal}>
       <ModalContainer onClick={e => e.stopPropagation()}>
@@ -22,8 +73,11 @@ export default function AuthModal({ closeModal }, props) {
               authState={setAuthState}
               back={signUp}
               signingIn={signingIn}
+              signedInUser={signedInUser}
             />
           )}
+
+  
 
           {authState == signUp && (
             <SignUpModal
@@ -41,19 +95,20 @@ export default function AuthModal({ closeModal }, props) {
               authState={setAuthState}
               back={signUp}
               confirmSignUp={confirmSignUp}
+              userSession={userSession}
              
              
             />
           )}
-          {authState == session && <ProfileModal user={user}/>}
-        
+          {authState == session && <ProfileModal cookie={cookie} signOut={signOut} removeCookie={removeCookie}/>}
+            
         </ModalWrapper>
       </ModalContainer>
     </Overlay>
   )
 }
 
-const SignInModal = ({ authState, back, signingIn }) => {
+const SignInModal = ({ authState, back, signingIn}) => {
   const emailRef = useRef()
   const passRef = useRef()
   return (
@@ -74,7 +129,9 @@ const SignInModal = ({ authState, back, signingIn }) => {
       </Wrapper>
 
       <Button
-        onClick={() => signingIn(emailRef.current.value, passRef.current.value)}
+        onClick={() => {
+          signingIn(emailRef.current.value, passRef.current.value)
+        }}
       >
         Sign in
       </Button>
@@ -157,15 +214,22 @@ const ConfirmationModal = ({ authState, back, confirmSignUp}) => {
   )
 }
 
-const ProfileModal = ({user}) =>{ 
+const ProfileModal = ({cookie, signOut, removeCookie}) =>{ 
 
-  const signedInUser = JSON.parse(user)
+  
   
   return (
   <>
-    <ModalTitle>Welcome, {signedInUser.firstName}</ModalTitle>
+    <ModalTitle>Welcome {cookie.given_name}!</ModalTitle>
+      {console.log('current sesison in profileModal', cookie.userId)}
     <Title>We hope you find our platform useful!</Title>
-    <Button style={{ background: "#F27A7D" }}>Sign out</Button>
+    <Button onClick={() => {
+      signOut()
+      removeCookie('userId', {path:"/"})
+      removeCookie('given_name', {path:"/"})
+      removeCookie('family_name', {path:"/"})
+      removeCookie('email', {path:"/"})
+    }} style={{ background: "#F27A7D" }}>Sign out</Button>
   </>
 )
 }

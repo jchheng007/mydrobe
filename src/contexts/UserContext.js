@@ -1,9 +1,9 @@
 import { UNSAFE_convertRoutesToDataRoutes } from '@remix-run/router'
-import React, { createContext, useContext, useReducer, useState} from 'react'
+import React, { createContext, useContext, useMemo, useReducer, useState} from 'react'
 import userReducer  from '../components/reducers/userReducer'
 
 export const initialState = {
-        user: null,
+        user: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -17,7 +17,10 @@ export const UserContext = createContext(initialState)
 export const UserProvider = ({children}) => {
     const [state, dispatch] = useReducer(userReducer, initialState)
     const [email, setEmail] = useState()
-
+    const [signedInUser, setSignedInUser] = useState()
+    // const currentUser = useMemo(() => ({signedInUser, setSignedInUser}), [signedInUser, setSignedInUser]);
+ 
+    
 
     const userEmail = (email) =>  {
         setEmail(email)
@@ -41,6 +44,7 @@ export const UserProvider = ({children}) => {
     }
 
     const userSession = (user) => {
+        setSignedInUser(user)
         dispatch({
             type: "USER_SESSION",
             payload: {
@@ -54,7 +58,7 @@ export const UserProvider = ({children}) => {
             type: "SIGN_IN",
             payload: {
                 email: email,
-                password: password
+                password: password,
             }
         })
     }
@@ -83,6 +87,8 @@ export const UserProvider = ({children}) => {
 
     const value = {
         email,
+        signedInUser, 
+        setSignedInUser,
         userEmail,
         guestSession,
         userSession,

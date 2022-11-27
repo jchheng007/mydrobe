@@ -18,21 +18,16 @@ import {signingUp, signingIn, confirmSignUp} from "../../App"
             }
 
         case "USER_SESSION":
-            console.log("payload is in user_session", payload.user)
             return {
                 ...state, 
                 user: payload.user
             }
 
         case "SIGN_IN":
-            const signedInUser =  signingIn(payload.email, payload.password)
-            console.log("signedInUsr is from userREducer", signedInUser)
             return {
                 ...state,
                 email: payload.email,
                 password: payload.password,
-                user :signedInUser,
-                
             }
 
         case "SIGN_UP":

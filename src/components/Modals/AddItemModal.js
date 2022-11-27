@@ -1,19 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from "styled-components"
 import Select from "react-select"
+import useUser from '../../contexts/UserContext'
 import {AsyncSelect} from "react-select/async"
 import xIcon from "../../images/icon/xIcon.svg"
 import { clothType, topCatType, bottomCatType, shoesCatType, colorData} from '../data/ModalData'
+import {API} from 'aws-amplify'
+import {useCookies} from 'react-cookie'
 export default function AddItemModal({closeModal}) {
 
   const [isOpen, setMenuOpen] = useState('');
   const [colorMenu, setColorMenu] = useState('')
   const [type, setType] = useState([]);
+  const [userSelectType, setUserSelectType] = useState();
+  const [userSeletColor, setUserSelectColor] = useState();
   const [file, setFile] = useState();
   const [previewURL, setPreviewURL] = useState();
   const ref = useRef(null);
-  
+  const [cookies, setCookie] = useCookies(['user'])
+  const [testItem, setTestItem] = useState()
+    const userId = cookies.userId
 
+    const selectRef = useRef()
+
+
+  const handleType = (selectedOption) => {
+    setUserSelectType(selectedOption.value)
+  }
+
+  const handleColor = (selectedOption) => {
+    setUserSelectColor(selectedOption.value)
+    console.log('color is', selectedOption.value)
+  }
+
+  const item = {
+    top: (type != shoesCatType && type != bottomCatType) ? userSelectType : '',
+    bottom: (type != topCatType && type != shoesCatType) ? userSelectType : '',
+    shoes: (type != topCatType && type != bottomCatType) ? userSelectType : '', 
+    image: !file ? '' : file.name, 
+    color: userSeletColor
+  }
 
   useEffect(() => {
     const reader = new FileReader();
@@ -23,7 +49,6 @@ export default function AddItemModal({closeModal}) {
         
       };
       reader.readAsDataURL(file)
-      console.log("haha", previewURL)
     } else {
       setPreviewURL(null)
     }
@@ -35,6 +60,8 @@ export default function AddItemModal({closeModal}) {
     <Overlay onClick={() => {
       closeModal(false)
       console.log("clicked")
+    
+      
     }}>
     <ModalContainer onClick={(e) => {e.stopPropagation()}}>
     <ModalWrapper style={{height: previewURL ? "742px" : "509px"}}>
@@ -65,47 +92,49 @@ export default function AddItemModal({closeModal}) {
            <ChoiceWrapper>
           <input type="radio" name="type" value={clothType[0].value} onChange={() => (
             setType(topCatType) 
-            
-  )}/>
+           
+  )} checked={type === topCatType}/>
             <img src={clothType[0].icon} />
           <label for={clothType[0].id} ><Title2>{clothType[0].title}</Title2></label>
 
           <input type="radio" name="type" value={clothType[1].value} onChange={()=> (
             setType(bottomCatType) 
-          )}/>
+          )} checked={type === bottomCatType}/>
             <img src={clothType[1].icon} />
           <label for={clothType[1].id} ><Title2>{clothType[1].title}</Title2></label>
 
           <input type="radio" name="type" value={clothType[2].value} onChange={() => (
             setType(shoesCatType) 
           
-  )}/>
+  )} checked={type === shoesCatType}/>
             <img src={clothType[2].icon} />
           <label for={clothType[2].id} ><Title2>{clothType[2].title}</Title2></label>
           </ChoiceWrapper>
         </form>
-
+        
 
     </ClothWrapper>
 <CategoryWrapper>
 <Title2>Choose Category </Title2>
      <Select 
-    
+     ref={selectRef}
     onMenuOpen={() => (
       setColorMenu(true)
 )}
     onMenuClose={() => (
       setColorMenu(false)
 )}
+
+    onChange={handleType}
     options={type}
+    
     />
 
 </CategoryWrapper>
-
-
 <CategoryWrapper>
 <Title2>Choose color </Title2>
      <Select 
+    
     
     onMenuOpen={() => (
       setMenuOpen(true)
@@ -113,6 +142,7 @@ export default function AddItemModal({closeModal}) {
     onMenuClose={() => (
       setMenuOpen(false)
 )}
+      onChange={handleColor}
     options={colorData}
     />
 
@@ -125,12 +155,15 @@ export default function AddItemModal({closeModal}) {
             console.log("clicked")
           }}
           >CANCEL</Button>
-          <Button>ADD</Button>
+          <Button onClick={console.log('item is', item)}>ADD</Button>
       </ButtonWrapper>
     </ ModalWrapper>
     </ModalContainer>
+
     </Overlay>
   )
+
+  
 }
 
 const Overlay = styled.div`

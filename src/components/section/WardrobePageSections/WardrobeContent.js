@@ -11,12 +11,13 @@ import AddItemModal from "../../Modals/AddItemModal"
 import topImage from "../../../images/clothes/top.jpeg"
 import bottomImage from "../../../images/clothes/bottom.jpeg"
 import shoeImage from "../../../images/clothes/shoe.jpeg"
-
+import useUser from "../../../contexts/UserContext"
 
 
 export default function WardrobeContent() {
     const [openModal, setOpenModal] = useState(false);
     const [content, setContent] = useState(AllContent);
+    
     
     useEffect(() => {
         
@@ -44,6 +45,7 @@ const NavItem = [
     },
 ]
 
+
     return(
     
         <Wrapper>
@@ -51,6 +53,7 @@ const NavItem = [
                     <NavTitleWrapper>
                         <img src={closetIcon} />
                         <NavTitle>Wardrobe</NavTitle>
+                
                     </NavTitleWrapper>
 
                     <ButtonWrapper>
@@ -70,12 +73,13 @@ const NavItem = [
                 </NavigationWrapper>
                    
                         <ContentWrapper>
-                        {content}
-                        <AddButton openModal={() => (setOpenModal(true))}/>
+                       
+                        <AddButton openModal={() => (setOpenModal(true)
+                            )}/>
                         </ContentWrapper>
                         
                     {openModal && <AddItemModal closeModal={setOpenModal}/>}
-
+                  
         </Wrapper>
     )
 }

@@ -27,51 +27,51 @@ export const clothType = [
   ]
 
   export const topCatType  = [
-        {value: "buttondownshirts", label: "Button Down Shirts"},
-        {value :"flannelshirts", label: "Flannel Shirts"},
-        {value: "polos", label: "Polos"},
-        {value: "tshirts", label: "T-shirts"},
-       {value: "sweaters", label: "Sweaters"},
-         {value: "sweatshirtshoodies", label: "Sweatshirts & Hoodies"},
-        {value: "casualbuttondownshirts", label: "Casual Button Down Shirts"},
-        {value: "graphicstees", label: "Graphics Tees"},
-        {value: "activewear", label: "ActiveWear"},
+        {value: "BUTTONDOWNSHIRTS", label: "Button Down Shirts"},
+        {value :"FLANNELSHIRTS", label: "Flannel Shirts"},
+        {value: "POLOS", label: "Polos"},
+        {value: "TSHIRTS", label: "T-shirts"},
+       {value: "SWEATERS", label: "Sweaters"},
+         {value: "SWEATSHIRTSHOODIES", label: "Sweatshirts & Hoodies"},
+        {value: "CASUALBUTTONDOWNSHIRTS", label: "Casual Button Down Shirts"},
+        {value: "GRAPHICSTEES", label: "Graphics Tees"},
+        {value: "ACTIVEWEAR", label: "ActiveWear"},
   ]
 
 
 
   export const bottomCatType  = [
-    {value: "jeans", label: "Jeans"},
-    {value :"chinos", label: "Chinos"},
-    {value: "joggers", label: "Joggers"},
-    {value: "shorts", label: "Shorts"},
-   {value: "dresspants", label: "Dress Pants"},
-     {value: "underwearlounge", label: "Underwear & Lounge"},
-    {value: "activewear", label: "Active Wear"}
+    {value: "JEANS", label: "Jeans"},
+    {value :"CHINOS", label: "Chinos"},
+    {value: "JOGGERS", label: "Joggers"},
+    {value: "SHORTS", label: "Shorts"},
+   {value: "DRESSPANTS", label: "Dress Pants"},
+     {value: "UNDERWEARLOUNGE", label: "Underwear & Lounge"},
+    {value: "ACTIVEWEAR", label: "Active Wear"}
 ]
 
 
 
 export const shoesCatType  = [
-    {value: "dressshoes", label: "Dress Shoes"},
-    {value :"sneakers", label: "Sneakers"},
-    {value: "boots", label: "Boots"},
+    {value: "DRESSSHOES", label: "Dress Shoes"},
+    {value :"SNEAKERS", label: "Sneakers"},
+    {value: "BOOTS", label: "Boots"},
 ]
 
 
 export const colorData = [
-  {value: "beige", label: "Beige"},
-  {value: "black", label: "Black"},
-  {value: "blue", label: "Blue"},
-  {value: "brown", label: "Brown"},
-  {value: "gray", label: "Gray"},
-  {value: "green", label: "Green"},
-  {value: "multi", label: "Multi"},
-  {value: "orange", label: "Orange"},
-  {value: "pink", label: "Pink"},
-  {value: "purple", label: "Purple"},
-  {value: "red", label: "Red"},
-  {value: "turquoise", label: "Turquoise"},
-  {value: "white", label: "White"},
-  {value: "yellow", label: "Yellow"}
+  {value: "BEIGE", label: "Beige"},
+  {value: "BLACK", label: "Black"},
+  {value: "BLUE", label: "Blue"},
+  {value: "BROWN", label: "Brown"},
+  {value: "GRAY", label: "Gray"},
+  {value: "GREEN", label: "Green"},
+  {value: "MULTI", label: "Multi"},
+  {value: "ORANGE", label: "Orange"},
+  {value: "PINK", label: "Pink"},
+  {value: "PURPLE", label: "Purple"},
+  {value: "RED", label: "Red"},
+  {value: "TURQUOISE", label: "Turquoise"},
+  {value: "WHITE", label: "White"},
+  {value: "YELLOW", label: "Yellow"}
 ]

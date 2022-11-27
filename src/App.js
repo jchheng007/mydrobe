@@ -14,8 +14,12 @@ import * as mutations from "./graphql/mutations"
 import awsConfig from "./aws-exports"
 import AuthModal from './components/Modals/AuthModal'
 import {UserProvider} from "./contexts/UserContext"
+import {CookiesProvider, useCookies} from 'react-cookie'
+import useUser from "./contexts/UserContext"
 
 Amplify.configure(awsConfig)
+
+
 
 export  async function signingUp (given_name, family_name, email, password)  {
   try {
@@ -41,18 +45,15 @@ export async function confirmSignUp(email, code) {
 export async function signingIn(email, password) {
   try 
   {
-    // const user = await Auth.signIn(email, password);
-     console.log("user email & password in app.js ", email, password)
-   
-    const user = {
-      firstName : "jayson",
-      lastName: "chheng"
-    }
-
-    console.log("user signing in  app.js ", user)
-    localStorage.setItem('user', JSON.stringify(user))
-
-    return user
+       const signedInUser = await Auth.signIn(email, password);
+       let sub; 
+      const attributes = await Auth.currentAuthenticatedUser({
+      }).then((attributes) => {console.log('user is in app.js', attributes.username)
+        sub = attributes.username
+        
+    })
+      .catch(err => console.log(err));
+      return sub
   } catch (err) {
     console.log("error in the signIn", err)
   }
@@ -77,10 +78,12 @@ export default function App() {
 
   return (
     <>
+    <CookiesProvider>
       <UserProvider>
       <Layout >
       </Layout>
       </UserProvider>
+      </CookiesProvider>
     </>
   )
 }
