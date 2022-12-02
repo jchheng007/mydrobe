@@ -38,3 +38,33 @@ export const listItems = /* GraphQL */ `
     }
   }
 `;
+export const itemsByUserid = /* GraphQL */ `
+  query ItemsByUserid(
+    $userid: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelItemFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    itemsByUserid(
+      userid: $userid
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userid
+        top
+        bottom
+        shoe
+        image
+        color
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

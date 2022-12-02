@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState} from "react"
 import styled from "styled-components"
 import closetIcon from "../../../images/icon/closetIcon.svg"
 import topIcon from "../../../images/icon/shirtIcon.svg"
@@ -12,12 +12,13 @@ import topImage from "../../../images/clothes/top.jpeg"
 import bottomImage from "../../../images/clothes/bottom.jpeg"
 import shoeImage from "../../../images/clothes/shoe.jpeg"
 import useUser from "../../../contexts/UserContext"
-
+import {API, graphqlOperation} from "aws-amplify"
 
 export default function WardrobeContent() {
     const [openModal, setOpenModal] = useState(false);
     const [content, setContent] = useState(AllContent);
     
+
     
     useEffect(() => {
         

@@ -1,6 +1,6 @@
-type Item @model @auth(rules: [{allow: public}]) {
+type Item @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  userid: String
+  userid: String @index(name: "getItemsByUserId")
   top: TopType
   bottom: BottomType
   shoe: ShoeType
@@ -29,6 +29,7 @@ enum ShoeType {
   DRESS_SHOES
   SNEAKERS
   BOOTS
+  NONE
 }
 
 enum BottomType {
@@ -39,6 +40,7 @@ enum BottomType {
   DRESSPANTS
   UNDERWEAR
   ACTIVEWEAR
+  NONE
 }
 
 enum TopType {
@@ -51,5 +53,5 @@ enum TopType {
   CASUALBUTTONDOWNSHIRTS
   GRAPHICSTEES
   ACTIVEWEAR
+  NONE
 }
- 

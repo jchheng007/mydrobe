@@ -5,7 +5,8 @@ import useUser from '../../contexts/UserContext'
 import {AsyncSelect} from "react-select/async"
 import xIcon from "../../images/icon/xIcon.svg"
 import { clothType, topCatType, bottomCatType, shoesCatType, colorData} from '../data/ModalData'
-import {API} from 'aws-amplify'
+import {API, Auth, graphqlOperation, Storage} from 'aws-amplify'
+import * as mutations from '../../graphql/mutations';
 import {useCookies} from 'react-cookie'
 export default function AddItemModal({closeModal}) {
 
@@ -13,7 +14,7 @@ export default function AddItemModal({closeModal}) {
   const [colorMenu, setColorMenu] = useState('')
   const [type, setType] = useState([]);
   const [userSelectType, setUserSelectType] = useState();
-  const [userSeletColor, setUserSelectColor] = useState();
+  const [userSelectColor, setUserSelectColor] = useState();
   const [file, setFile] = useState();
   const [previewURL, setPreviewURL] = useState();
   const ref = useRef(null);
@@ -33,14 +34,17 @@ export default function AddItemModal({closeModal}) {
     console.log('color is', selectedOption.value)
   }
 
-  const item = {
-    top: (type != shoesCatType && type != bottomCatType) ? userSelectType : '',
-    bottom: (type != topCatType && type != shoesCatType) ? userSelectType : '',
-    shoes: (type != topCatType && type != bottomCatType) ? userSelectType : '', 
+  const itemDetails = {
+    userid: userId,
+    top: (type != shoesCatType && type != bottomCatType) ? userSelectType : 'NONE',
+    bottom: (type != topCatType && type != shoesCatType) ? userSelectType : 'NONE',
+    shoe: (type != topCatType && type != bottomCatType) ? userSelectType : 'NONE', 
     image: !file ? '' : file.name, 
-    color: userSeletColor
+    color: userSelectColor
   }
 
+
+  
   useEffect(() => {
     const reader = new FileReader();
     if(file) {
@@ -55,6 +59,15 @@ export default function AddItemModal({closeModal}) {
   }, [type, file])
  
 
+  const handleUpload = async(itemDetails, file) => {
+    try {
+       await Storage.put(itemDetails.image, file);
+       await API.graphql(graphqlOperation(mutations.createItem, {input: itemDetails}))
+        console.log('handleupload is working', itemDetails)
+     } catch(err) {
+      console.log('error in the handleupload function', err)
+     }
+  }
 
   return (
     <Overlay onClick={() => {
@@ -155,7 +168,7 @@ export default function AddItemModal({closeModal}) {
             console.log("clicked")
           }}
           >CANCEL</Button>
-          <Button onClick={console.log('item is', item)}>ADD</Button>
+          <Button onClick={() => (handleUpload(itemDetails, file))}>ADD</Button>
       </ButtonWrapper>
     </ ModalWrapper>
     </ModalContainer>
