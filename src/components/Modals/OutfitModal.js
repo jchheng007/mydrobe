@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from "styled-components"
-
+import {shoeIcon} from "../../images/icon/shoeIcon.svg"
 
 export default function OutfitModal(props) {
-    const {top, bottom, shoe, closeModal} = props 
+    const {top, bottom, shoes, closeModal} = props 
   return (
     <Overlay onClick={() => {props.closeModal(false)
     console.log("isCLickedonModal")
@@ -19,7 +19,7 @@ export default function OutfitModal(props) {
 
             <BackCardBottomContent>
                 <Image src={bottom} />
-                <Image src={shoe} />
+               {shoes === "" ?  <Black /> : <Image src={shoes} />}
 
             </BackCardBottomContent>
            
@@ -103,4 +103,9 @@ width: 232.9px;
 height: 268.09px;
 border-radius: 20px;
 object-fit: cover;
+`
+const Black = styled.div`
+width: 232.9px;
+height: 268.09px;
+color: black;
 `

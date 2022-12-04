@@ -1,20 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import weatherBackground from "../../images/background/weatherBackground.svg"
 import weatherIcon from "../../images/icon/weatherIcon.svg"
 import arrowIcon from "../../images/icon/arrow.svg"
+import shoeIcon from "../../images/icon/shoeIcon.svg"
 import {Caption} from "../.../../../styles/TextStyles"
 import ReactCardFlip from 'react-card-flip'
-import top from "../../images/clothes/top.jpeg"
-import bottom from "../../images/clothes/bottom.jpeg"
-import shoe from "../../images/clothes/shoe.jpeg"
-
+// import top from "../../images/clothes/top.jpeg"
+// import bottom from "../../images/clothes/bottom.jpeg"
+// import shoes from "../../images/clothes/shoe.jpeg"
+import { useCookies } from 'react-cookie'
+import {API, graphqlOperation, Storage} from "aws-amplify"
+import * as queries from "../../graphql/queries"
+import { Item } from 'muuri'
 
 export default function OutfitCardComponent(props) {
-    const {icon, title, description, background, showModal} = props;
-    const [isFlip, setFlip] = useState(false); 
-    
-    
+    const {icon, title, description, background, showModal, top, bottom, shoes, generator} = props;
+    const [isFlip, setFlip] = useState(false);   
+
+   
+
+
 
  
     return (
@@ -32,18 +38,22 @@ export default function OutfitCardComponent(props) {
         </DescriptionTitleWrapper>
 
         <ButtonWrapper>
-        <Button onClick={() => {setFlip(true)}}>
+        <Button onClick={() => {
+            setFlip(true)
+            generator.topGenerator(generator.topArr)
+            generator.bottomGenerator(generator.bottomArr)
+            generator.shoesGenerator(generator.shoesArr)
+        }}>
             <ButtonTitle>Generate</ButtonTitle>
             <ButtonIcon src={arrowIcon} />
         </Button>
         </ButtonWrapper>
         </DescriptionWrapper>
 
-       
+        
         </FrontCard>
-
+      
         <BackCard onClick={() => {props.showModal(true)}} >
-
             <BackCardWrapper  >
             <BackCardContentWrapper>
                  <BackCardTopContent>
@@ -52,7 +62,7 @@ export default function OutfitCardComponent(props) {
 
             <BackCardBottomContent>
                 <Image src={bottom} />
-                <Image src={shoe} />
+                {shoes ? <Image src={shoes} /> : console.log('no pic')}
 
             </BackCardBottomContent>
            

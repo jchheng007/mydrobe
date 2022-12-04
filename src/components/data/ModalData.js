@@ -8,21 +8,21 @@ export const clothType = [
       id: "clothType1",
       title: "Top",
       icon: shirtIcon,
-      value: "top",
+      value: "TOP",
     }, 
   
     {
       id: "clothType2",
       title: "Bottom",
       icon: bottomIcon,
-      value: "bottom",
+      value: "BOTTOM",
     },
   
     {
       id: "clothType3",
       title: "Shoes",
       icon: shoeIcon,
-      value: "shoes"
+      value: "SHOES"
     },
   ]
 
@@ -32,10 +32,11 @@ export const clothType = [
         {value: "POLOS", label: "Polos"},
         {value: "TSHIRTS", label: "T-shirts"},
        {value: "SWEATERS", label: "Sweaters"},
-         {value: "SWEATSHIRTSHOODIES", label: "Sweatshirts & Hoodies"},
+         {value: "SWEATSHIRT_HOODIES", label: "Sweatshirts & Hoodies"},
         {value: "CASUALBUTTONDOWNSHIRTS", label: "Casual Button Down Shirts"},
         {value: "GRAPHICSTEES", label: "Graphics Tees"},
         {value: "ACTIVEWEAR", label: "ActiveWear"},
+        {value: "TANKTOPS", label: "Tank tops"},
   ]
 
 
@@ -46,16 +47,17 @@ export const clothType = [
     {value: "JOGGERS", label: "Joggers"},
     {value: "SHORTS", label: "Shorts"},
    {value: "DRESSPANTS", label: "Dress Pants"},
-     {value: "UNDERWEARLOUNGE", label: "Underwear & Lounge"},
+     {value: "UNDERWEAR", label: "Underwear & Lounge"},
     {value: "ACTIVEWEAR", label: "Active Wear"}
 ]
 
 
 
 export const shoesCatType  = [
-    {value: "DRESSSHOES", label: "Dress Shoes"},
+    {value: "DRESS_SHOES", label: "Dress Shoes"},
     {value :"SNEAKERS", label: "Sneakers"},
     {value: "BOOTS", label: "Boots"},
+    {value: "SANDALS", label: "Sandals"}
 ]
 
 

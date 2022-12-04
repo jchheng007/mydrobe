@@ -8,11 +8,12 @@ import { clothType, topCatType, bottomCatType, shoesCatType, colorData} from '..
 import {API, Auth, graphqlOperation, Storage} from 'aws-amplify'
 import * as mutations from '../../graphql/mutations';
 import {useCookies} from 'react-cookie'
-export default function AddItemModal({closeModal}) {
+export default function AddItemModal({closeModal, fetchImages}) {
 
   const [isOpen, setMenuOpen] = useState('');
   const [colorMenu, setColorMenu] = useState('')
   const [type, setType] = useState([]);
+  const [prefix, setPrefix] = useState();
   const [userSelectType, setUserSelectType] = useState();
   const [userSelectColor, setUserSelectColor] = useState();
   const [file, setFile] = useState();
@@ -59,16 +60,29 @@ export default function AddItemModal({closeModal}) {
   }, [type, file])
  
 
-  const handleUpload = async(itemDetails, file) => {
+  const handleUpload = async(prefix, type, itemDetails, file) => {
     try {
-       await Storage.put(itemDetails.image, file);
-       await API.graphql(graphqlOperation(mutations.createItem, {input: itemDetails}))
+       await Storage.put(prefix + "/" + type + "/" + itemDetails.image, file, {
+        level: "protected",
+       });
+
         console.log('handleupload is working', itemDetails)
+        fetchImages()
      } catch(err) {
       console.log('error in the handleupload function', err)
      }
   }
 
+  const handleCreate = async(itemDetails) => {
+    try {
+      await API.graphql(graphqlOperation(mutations.createItem, {input: itemDetails}))
+      console.log('handlecreate is working', itemDetails)
+      
+    } catch (err) {
+      console.log('error in the handleCreate', err)
+    }
+  }
+  
   return (
     <Overlay onClick={() => {
       closeModal(false)
@@ -103,23 +117,25 @@ export default function AddItemModal({closeModal}) {
       
         <form >
            <ChoiceWrapper>
-          <input type="radio" name="type" value={clothType[0].value} onChange={() => (
+          <input type="radio" name="type" value={clothType[0].value} onChange={() => {
             setType(topCatType) 
-           
-  )} checked={type === topCatType}/>
+            setPrefix("TOP")
+  }} checked={type === topCatType}/>
             <img src={clothType[0].icon} />
           <label for={clothType[0].id} ><Title2>{clothType[0].title}</Title2></label>
 
-          <input type="radio" name="type" value={clothType[1].value} onChange={()=> (
+          <input type="radio" name="type" value={clothType[1].value} onChange={()=> {
             setType(bottomCatType) 
-          )} checked={type === bottomCatType}/>
+            setPrefix("BOTTOM")
+          }} checked={type === bottomCatType}/>
             <img src={clothType[1].icon} />
           <label for={clothType[1].id} ><Title2>{clothType[1].title}</Title2></label>
 
-          <input type="radio" name="type" value={clothType[2].value} onChange={() => (
+          <input type="radio" name="type" value={clothType[2].value} onChange={() => {
             setType(shoesCatType) 
+            setPrefix("SHOES")
           
-  )} checked={type === shoesCatType}/>
+          }} checked={type === shoesCatType}/>
             <img src={clothType[2].icon} />
           <label for={clothType[2].id} ><Title2>{clothType[2].title}</Title2></label>
           </ChoiceWrapper>
@@ -161,14 +177,20 @@ export default function AddItemModal({closeModal}) {
 
 </CategoryWrapper>
 
+  
 
       <ButtonWrapper>
           <Button onClick={() => {
             closeModal(false)
             console.log("clicked")
+            
           }}
           >CANCEL</Button>
-          <Button onClick={() => (handleUpload(itemDetails, file))}>ADD</Button>
+          <Button onClick={() => {
+            handleUpload(prefix, userSelectType, itemDetails, file)
+            handleCreate(itemDetails)
+          closeModal(false)
+          }}>ADD</Button>
       </ButtonWrapper>
     </ ModalWrapper>
     </ModalContainer>
